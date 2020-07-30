@@ -1,25 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Suspense } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Router, Route, Switch } from 'react-router-dom';
+import { routes } from './modules/routes';
+
+import { createBrowserHistory } from 'history';
+const customHistory = createBrowserHistory();
+
+
+class LoadingComponent extends React.Component {
+  render() {
+    return (
+      <CircularProgress />
+    )
+  }
+}
+
+const Root = () => (
+    <Suspense fallback={<LoadingComponent/>}>
+      <Router history={customHistory}>
+        <Switch>
+          {routes.map((route, index) => <Route key={index} {...route}></Route>)}
+        </Switch>
+      </Router>
+    </Suspense>
+)
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Root></Root>
   );
 }
 
